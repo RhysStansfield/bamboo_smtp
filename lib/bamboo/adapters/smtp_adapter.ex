@@ -167,8 +167,8 @@ defmodule Bamboo.SMTPAdapter do
 
   defp add_multipart_mixed_split(body, delimiter), do: "#{body}\r\n--#{delimiter}\r\n"
 
-  defp add_attachment_header(body, filename) do
-    "#{body}Content-Type: text/plain; charset=ISO-8859-1; name=\"#{filename}\"\r\n" <>
+  defp add_attachment_header(body, filename, content_type) do
+    "#{body}Content-Type: #{content_type}; charset=ISO-8859-1; name=\"#{filename}\"\r\n" <>
     "Content-Disposition: attachment; filename=\"#{filename}\"\r\n" <>
     "Content-Transfer-Encoding: base64\r\n" <>
     "X-Attachment-Id: f_isu9uy5p0\r\n"
@@ -195,7 +195,7 @@ defmodule Bamboo.SMTPAdapter do
     else
       ""
       |> add_multipart_mixed_split(multi_part_mixed_delimiter)
-      |> add_attachment_header(attachment.filename)
+      |> add_attachment_header(attachment.filename, attachment.content_type)
       |> add_attachment_body(attachment.path)
     end
   end
